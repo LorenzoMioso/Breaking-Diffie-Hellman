@@ -115,7 +115,7 @@ def main():
                 #print(f"res_b = {res_b} ({res[6:10]})")
                 #print(f"res_a = {res_a} ({res[10:]})")
 
-                print(f"{a} + {b} % {n} = {res_b}, {"OK" if (a + b) % n == res_b else "FAIL"}")
+                print(f"{a} + {b} % {n} = {res_b}, {'OK' if (a + b) % n == res_b else 'FAIL'}")
                 # print(
                 #    f"bits_a = {res[8:]}, bits_b = {res[4:8]}, bits_n = {res[1:4]}, bits_t = {res[0]}"
                 # )

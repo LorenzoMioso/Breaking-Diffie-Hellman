@@ -1,3 +1,5 @@
+import time
+
 from mod_addr4 import mod_addr4
 from qiskit import ClassicalRegister, QuantumCircuit, QuantumRegister, transpile
 from qiskit.primitives import Sampler
@@ -173,8 +175,11 @@ def main():
             qc.measure(T, REST)
             # print(qc.decompose().draw())
             # print(qc.decompose().decompose().draw())
+            start_time = time.time()
+            print("Starting job")
             job = sampler.run(qc, shots=2048)
             result = job.result()
+            print(f"Job finished in {time.time() - start_time} seconds")
             res = next(iter(result.quasi_dists[0].binary_probabilities()))
 
             res_t = int(res[0], 2)
