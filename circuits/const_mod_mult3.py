@@ -163,6 +163,7 @@ def main():
             except Exception as e:
                 print("skipping due to error", e)
                 continue
+
             qc.measure(X, RESX)
             qc.measure(A, RESA)
             qc.measure(B[0], RESB[0])

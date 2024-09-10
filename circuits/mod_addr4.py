@@ -19,7 +19,7 @@ def control_prepare_4(x):
     return qc
 
 
-def mod_addr3(A, B, C, N, T, n):
+def mod_addr4(A, B, C, N, T, n):
     """
     4-bit VBE adder circuit
     |a,b> -> |a,a+b>, 0 <= a,b < n
@@ -89,7 +89,7 @@ def main():
                     if n & (1 << i):
                         qc.x(N[i])
 
-                qc.append(mod_addr3(A, B, C, N, T, n), A[:] + B[:] + C[:] + N[:] + T[:])
+                qc.append(mod_addr4(A, B, C, N, T, n), A[:] + B[:] + C[:] + N[:] + T[:])
                 # print(qc.decompose().draw())
                 qc.measure(A, RESA)
                 qc.measure(B[0], RESB[0])
@@ -100,7 +100,7 @@ def main():
                 qc.measure(N, RESN)
                 qc.measure(T, REST)
                 # print(qc.decompose().draw())
-                job = sampler.run(qc, shots=2048)
+                job = sampler.run(qc, shots=1)
                 result = job.result()
                 res = next(iter(result.quasi_dists[0].binary_probabilities()))
 
@@ -108,7 +108,12 @@ def main():
                 res_n = int(res[1:5], 2)
                 # res_b = twos_complement_to_signed_int(res[4:8])
                 res_b = int(res[6:10], 2)
-                res_a = int(res[11:], 2)
+                res_a = int(res[10:], 2)
+
+                #print(f"res_t = {res_t} ({res[0]})")
+                #print(f"res_n = {res_n} ({res[1:5]})")
+                #print(f"res_b = {res_b} ({res[6:10]})")
+                #print(f"res_a = {res_a} ({res[10:]})")
 
                 print(f"{a} + {b} % {n} = {res_b}, {"OK" if (a + b) % n == res_b else "FAIL"}")
                 # print(

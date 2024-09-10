@@ -105,13 +105,14 @@ def main():
                 res_b = int(res[5:8], 2)
                 res_a = int(res[8:], 2)
 
+                # print(f"res_t = {res_t} ({res[0]})")
+                # print(f"res_n = {res_n} ({res[1:4]})")
+                # print(f"res_b = {res_b} ({res[5:8]})")
+                # print(f"res_a = {res_a} ({res[8:]})")
+
                 print(f"{a} + {b} % {n} = {res_b}")
-                # print(
-                #    f"bits_a = {res[8:]}, bits_b = {res[4:8]}, bits_n = {res[1:4]}, bits_t = {res[0]}"
-                # )
-                # print(
-                #    f"res_a = {res_a}, res_b = {res_b}, res_n = {res_n}, res_t = {res_t}"
-                # )
+                if res_b != (a + b) % n:
+                    print("ERROR ##########################")
                 # break
             # break
         # break
