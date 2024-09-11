@@ -152,14 +152,10 @@ def main():
                 if n & (1 << i):
                     qc.x(N[i])
 
-            try:
-                qc.append(
-                    const_mod_mult4(C, X, A, B, CARRY, N, T, n, a),
-                    C[:] + X[:] + A[:] + B[:] + CARRY[:] + N[:] + T[:],
-                )
-            except Exception as e:
-                print("skipping due to error", e)
-                continue
+            qc.append(
+                const_mod_mult4(C, X, A, B, CARRY, N, T, n, a),
+                C[:] + X[:] + A[:] + B[:] + CARRY[:] + N[:] + T[:],
+            )
 
             # print(qc.decompose().draw())
             # print(qc.decompose().decompose().draw())

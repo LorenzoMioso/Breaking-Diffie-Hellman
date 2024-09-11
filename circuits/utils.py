@@ -8,7 +8,7 @@ def run_circuit(qc):
     job_sim = backend.run(qc_compiled, shots=1024)
     result_sim = job_sim.result()
     counts = result_sim.get_counts(qc_compiled)
-    # print(counts)
+    print(counts)
     if len(counts) > 1:
         print("WARNING: More than one result")
     res = next(iter(counts))
