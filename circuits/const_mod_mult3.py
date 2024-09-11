@@ -1,8 +1,7 @@
-from addr3 import addr3
 from mod_addr3 import mod_addr3
 from qiskit import ClassicalRegister, QuantumCircuit, QuantumRegister
 from qiskit.primitives import Sampler
-from subtr3 import subtr3, twos_complement_to_signed_int
+from utils import run_circuit
 
 
 def double_controlled_exp_prep(a, k):
@@ -111,7 +110,7 @@ def const_mod_mult3(C, X, A, B, CARRY, N, T, n, a):
         qc.append(double_controlled_exp_prep_inv(a, i), [C] + [qx] + A[:])
         qc.barrier()
 
-    # qc.append(controlled_copy3(C, X, B), C[:] + X[:] + B[:])
+    qc.append(controlled_copy3(C, X, B), C[:] + X[:] + B[:])
 
     # Apply the adder with modulus
     qc.barrier()
@@ -134,15 +133,12 @@ def main():
     RESN = ClassicalRegister(3, "res_n")
     REST = ClassicalRegister(1, "res_t")
 
-    sampler = Sampler()
-    a = 2
+    a = 1
 
     # test all possible inputs
     for n in range(1, 8):
-        print(f"Modulus: {n} ############################")
         # n = 7
         for x in range(8):
-            print(f"Multiplier: {a}, Multiplicand: {x} ############################")
             # x = 4
             if x >= n or a >= n:
                 continue
@@ -174,25 +170,26 @@ def main():
             qc.measure(T, REST)
             # print(qc.decompose().draw())
             # print(qc.decompose().decompose().draw())
-            job = sampler.run(qc, shots=2048)
-            result = job.result()
-            res = next(iter(result.quasi_dists[0].binary_probabilities()))
+            res = run_circuit(qc)
 
             res_t = int(res[0], 2)
             res_n = int(res[1:4], 2)
             # res_b = twos_complement_to_signed_int(res[4:8])
-            res_b = int(res[5:8], 2)
+            res_b = int(res[4:8], 2)
             res_a = int(res[8:11], 2)
             res_x = int(res[11:], 2)
 
             # print(f"x : {res_x} ({res[11:]})")
             # print(f"a : {res_a} ({res[8:11]})")
-            # print(f"b : {res_b} ({res[5:8]})")
+            # print(f"b : {res_b} ({res[4:8]})")
             # print(f"n : {res_n} ({res[1:4]})")
             # print(f"t : {res_t} ({res[0]})")
 
-            print(f"{a} * {x} = {res_a}")
-            print(f"{a} * {x} % {n} = {res_b}")
+            print(f"{a} * {x} % {n} = {res_b}", end=" ")
+            if res_b != (a * x) % n:
+                print("ERROR")
+            else:
+                print("SUCCESS")
             # break
         # break
 

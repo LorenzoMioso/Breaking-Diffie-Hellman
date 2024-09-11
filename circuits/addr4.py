@@ -1,6 +1,6 @@
 from addr3 import carry3, reverse_carry3, sum3
 from qiskit import ClassicalRegister, QuantumCircuit, QuantumRegister
-from qiskit.primitives import Sampler
+from utils import run_circuit
 
 
 def addr4(A, B, C):
@@ -40,8 +40,6 @@ def main():
     RES = ClassicalRegister(5, "res")
     qc = QuantumCircuit(A, B, C, RES)
 
-    sampler = Sampler()
-
     # test all possible inputs
     for a in range(2**4):
         for b in range(2**4):
@@ -57,10 +55,8 @@ def main():
             qc.measure(B[2], RES[2])
             qc.measure(B[3], RES[3])
             qc.measure(C[4], RES[4])
-            job = sampler.run(qc, shots=10000000)
-            result = job.result()
+            res = int(run_circuit(qc), 2)
 
-            res = next(iter(result.quasi_dists[0]))
             if a + b == res:
                 print(f"{a} + {b} = {res} : OK")
             else:
