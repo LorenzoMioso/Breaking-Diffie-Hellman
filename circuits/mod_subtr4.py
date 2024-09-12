@@ -26,12 +26,9 @@ def mod_subtr4(A, B, C, N, T, n):
     qc = QuantumCircuit(A, B, C, N, T, name="mod_subtr4")
 
     # Apply the subtractor with modulus
-    qc.barrier()
     # b - a
     qc.append(subtr4(A, B, C), A[:] + B[:] + C[:])
-    qc.barrier()
     qc.cx(c_4, t)
-    qc.barrier()
     # (b - a) + a
     qc.append(addr4(A, B, C), A[:] + B[:] + C[:])
     qc.swap(A, N)
@@ -39,7 +36,6 @@ def mod_subtr4(A, B, C, N, T, n):
     # (b - a) + a - n if overflow
     qc.append(subtr4(A, B, C), A[:] + B[:] + C[:])
     qc.append(control_prepare_4(n), A[:] + [t])
-    qc.barrier()
     qc.x(c_4)
     qc.cx(c_4, t)
     qc.x(c_4)

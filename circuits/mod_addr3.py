@@ -40,17 +40,13 @@ def mod_addr3(A, B, C, N, T, n):
     qc.x(c_3)
     qc.cx(c_3, t)
     qc.x(c_3)
-    qc.barrier()
     qc.append(control_prepare_3(n), A[:] + [t])
     qc.append(addr3(A, B, C), A[:] + B[:] + C[:])
     qc.append(control_prepare_3(n), A[:] + [t])
     qc.swap(A, N)
     qc.append(subtr3(A, B, C), A[:] + B[:] + C[:])
-    qc.barrier()
     qc.cx(c_3, t)
-    qc.barrier()
     qc.append(addr3(A, B, C), A[:] + B[:] + C[:])
-    qc.barrier()
 
     return qc
 

@@ -108,12 +108,10 @@ def const_mod_mult3(C, X, A, B, CARRY, N, T, n, a):
         qc.append(double_controlled_exp_prep(a, i), [C] + [qx] + A[:])
         qc.append(mod_addr3(A, B, CARRY, N, T, n), A[:] + B[:] + CARRY[:] + N[:] + T[:])
         qc.append(double_controlled_exp_prep_inv(a, i), [C] + [qx] + A[:])
-        qc.barrier()
 
     qc.append(controlled_copy3(C, X, B), C[:] + X[:] + B[:])
 
     # Apply the adder with modulus
-    qc.barrier()
 
     return qc
 

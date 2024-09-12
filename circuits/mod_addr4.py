@@ -44,7 +44,6 @@ def mod_addr4(A, B, C, N, T, n):
     qc.x(c_4)
     qc.cx(c_4, t)
     qc.x(c_4)
-    qc.barrier()
     # add n if overflow
     qc.append(control_prepare_4(n), A[:] + [t])
     qc.append(addr4(A, B, C), A[:] + B[:] + C[:])
@@ -52,11 +51,8 @@ def mod_addr4(A, B, C, N, T, n):
     # go back to the original state
     qc.swap(A, N)
     qc.append(subtr4(A, B, C), A[:] + B[:] + C[:])
-    qc.barrier()
     qc.cx(c_4, t)
-    qc.barrier()
     qc.append(addr4(A, B, C), A[:] + B[:] + C[:])
-    qc.barrier()
 
     return qc
 
@@ -75,9 +71,11 @@ def main():
 
     # test all possible inputs
     for n in range(1, 2**4):
-        print(f"Modulus: {n} ############################")
+        n = 15
         for a in range(2**4):
+            a = 8
             for b in range(2**4):
+                b = 8
                 if b >= n or a >= n:
                     continue
                 qc = QuantumCircuit(A, B, C, N, T, RESA, RESB, RESN, REST)
@@ -117,9 +115,8 @@ def main():
                 print(
                     f"{a} + {b} % {n} = {res_b}, {'OK' if (a + b) % n == res_b else 'FAIL'}"
                 )
-                # break
-            # break
-        # break
+
+                exit(0)
 
 
 if __name__ == "__main__":

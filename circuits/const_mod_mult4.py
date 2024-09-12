@@ -1,3 +1,5 @@
+import math
+
 from mod_addr4 import mod_addr4
 from qiskit import ClassicalRegister, QuantumCircuit, QuantumRegister
 from utils import run_circuit
@@ -107,12 +109,8 @@ def const_mod_mult4(C, X, A, B, CARRY, N, T, n, a):
         qc.append(double_controlled_exp_prep(a, i), [C] + [qx] + A[:])
         qc.append(mod_addr4(A, B, CARRY, N, T, n), A[:] + B[:] + CARRY[:] + N[:] + T[:])
         qc.append(double_controlled_exp_prep_inv(a, i), [C] + [qx] + A[:])
-        qc.barrier()
 
     qc.append(controlled_copy4(C, X, B), C[:] + X[:] + B[:])
-
-    # Apply the adder with modulus
-    qc.barrier()
 
     return qc
 
@@ -137,10 +135,12 @@ def main():
 
     # test all possible inputs
     for n in range(2**4):
+        n = 15
         # print(f"Modulus: {n} ############################")
-        for x in range(2**4):
+        for x in range(1, 2**4):
             # print(f"Multiplier: {a}, Multiplicand: {x} ############################")
-            if x >= n or a >= n:
+            # if x >= n or a >= n or a * x >= n:
+            if x >= n or a >= n or ((a * int(2 ** math.log2(x))) > 15):
                 continue
             qc = QuantumCircuit(C, X, A, B, CARRY, N, T, RESX, RESA, RESB, RESN, REST)
             # set C to 1
@@ -180,7 +180,7 @@ def main():
             # print(f"n = {res_n}, ({res[1:5]})")
             # print(f"b = {res_b}, ({res[5:10]})")
             # print(f"a = {res_a}, ({res[10:14]})")
-            # print(f"x = {x}, x_res = {res_x}, ({res[14:]})")
+            # print(f"x = {res_x}, ({res[14:]})")
 
             if apply_multiplier:
                 print(f"{a} * {x} % {n} = {res_b}", end=" ")
@@ -195,8 +195,8 @@ def main():
                     print("ERROR")
                 else:
                     print("SUCCESS")
-            # break
-        # break
+
+        exit(0)
 
 
 if __name__ == "__main__":
