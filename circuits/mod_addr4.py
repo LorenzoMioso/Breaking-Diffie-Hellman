@@ -5,7 +5,7 @@ from utils import run_circuit
 
 
 def control_prepare_4(x):
-    qc = QuantumCircuit(5)
+    qc = QuantumCircuit(5, name=f"control_prepare_{x}")
     if x & 1:
         qc.cx(4, 0)
     if x & 2:
@@ -66,19 +66,20 @@ def main():
     T = QuantumRegister(1, "t")
     RESA = ClassicalRegister(4, "res_a")
     RESB = ClassicalRegister(5, "res_b")
+    RESC = ClassicalRegister(4, "res_c")
     RESN = ClassicalRegister(4, "res_n")
     REST = ClassicalRegister(1, "res_t")
 
     # test all possible inputs
     for n in range(1, 2**4):
-        n = 15
+        n = 4
         for a in range(2**4):
-            a = 8
+            a = 3
             for b in range(2**4):
-                b = 8
-                if b >= n or a >= n:
-                    continue
-                qc = QuantumCircuit(A, B, C, N, T, RESA, RESB, RESN, REST)
+                b = 6
+                # if b >= n or a >= n:
+                #    continue
+                qc = QuantumCircuit(A, B, C, N, T, RESA, RESB, RESC, RESN, REST)
                 for i in range(4):
                     if a & (1 << i):
                         qc.x(A[i])
@@ -97,6 +98,10 @@ def main():
                 qc.measure(B[2], RESB[2])
                 qc.measure(B[3], RESB[3])
                 qc.measure(C[4], RESB[4])
+                qc.measure(C[0], RESC[0])
+                qc.measure(C[1], RESC[1])
+                qc.measure(C[2], RESC[2])
+                qc.measure(C[3], RESC[3])
                 qc.measure(N, RESN)
                 qc.measure(T, REST)
                 # print(qc.decompose().draw())
@@ -104,19 +109,21 @@ def main():
 
                 res_t = int(res[0], 2)
                 res_n = int(res[1:5], 2)
-                res_b = int(res[5:10], 2)
-                res_a = int(res[10:], 2)
+                res_c = int(res[5:9], 2)
+                res_b = int(res[9:14], 2)
+                res_a = int(res[14:], 2)
 
-                # print(f"res_t = {res_t} ({res[0]})")
-                # print(f"res_n = {res_n} ({res[1:5]})")
-                # print(f"res_b = {res_b} ({res[6:10]})")
-                # print(f"res_a = {res_a} ({res[10:]})")
+                print(f"res_t = {res_t} ({res[0]})")
+                print(f"res_n = {res_n} ({res[1:5]})")
+                print(f"res_c = {res_c} ({res[5:9]})")
+                print(f"res_b = {res_b} ({res[9:14]})")
+                print(f"res_a = {res_a} ({res[14:]})")
 
                 print(
                     f"{a} + {b} % {n} = {res_b}, {'OK' if (a + b) % n == res_b else 'FAIL'}"
                 )
 
-                exit(0)
+                exit()
 
 
 if __name__ == "__main__":

@@ -45,8 +45,6 @@ def mod_subtr4(A, B, C, N, T, n):
     #
     qc.append(subtr4(A, B, C), A[:] + B[:] + C[:])
 
-    # this modulator is not working b
-
     return qc
 
 
@@ -99,9 +97,13 @@ def main():
                 res_b = twos_complement_to_signed_int(res[5:10])
                 res_a = int(res[10:], 2)
 
-                print(
-                    f"{b} - {a} % {n} = {res_b}, {'OK' if (b - a) % n == res_b else 'FAIL'}"
-                )
+                # print(
+                #    f"{b} - {a} % {n} = {res_b}, {'OK' if (b - a) % n == res_b else 'FAIL'}"
+                # )
+                # print only failed tests
+                if (b - a) % n != res_b:
+                    print(f"Expected: {(b - a) % n}, Got: {res_b}")
+                    print(f"Expected: {b - a}, Got: {res_b} % {n} = {res_b}")
 
                 # break
             # break
