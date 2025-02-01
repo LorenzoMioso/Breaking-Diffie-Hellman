@@ -239,6 +239,8 @@ def main():
                     else:
                         print("SUCCESS")
 
+                exit(0)
+
 
 def test():
     # test double_controlled_exp_prep

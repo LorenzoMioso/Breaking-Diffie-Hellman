@@ -28,7 +28,7 @@ def const_mod_exp4(X, C, X_MULT, A, B, CARRY, N, T, n, a):
     # prepare to |1> X_MULT
     qc.x(X_MULT[0])
 
-    for i, qx in enumerate(X):
+    for i, qx in enumerate(reversed(X)):
         # qx must activate the multiplication by flipping C
         qc.cx(qx, C)
         # apply modular multiplication

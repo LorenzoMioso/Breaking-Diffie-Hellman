@@ -1,0 +1,80 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{braket}
+\usepackage{graphicx}
+
+\title{Discrete Logarithm Algorithm in Diffie-Hellman Attacks:\\
+A Quantum Computing Approach}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+The Discrete Logarithm Algorithm (DLA) plays a crucial role in cryptanalysis, particularly in attacking the Diffie-Hellman key exchange protocol. This paper examines how DLA can be exploited to compromise the security of Diffie-Hellman and presents a quantum algorithm that provides a polynomial-time solution using the Quantum Fourier Transform (QFT).
+
+\section{DLA in Diffie-Hellman Attack}
+The Diffie-Hellman key exchange protocol relies on the computational hardness of the discrete logarithm problem. Given a prime modulus $p$, a generator $g$, and public values $g^a \bmod p$ and $g^b \bmod p$, an attacker who can efficiently solve the discrete logarithm problem can recover:
+
+\begin{equation}
+    a = \log_g(g^a \bmod p)
+\end{equation}
+
+With knowledge of $a$, the attacker can then compute the shared secret:
+
+\begin{equation}
+    k = (g^b)^a \bmod p
+\end{equation}
+
+The classical DLA has sub-exponential complexity, making it computationally infeasible for large prime moduli. However, quantum computing offers a polynomial-time solution.
+
+\section{Quantum Algorithm for DLA}
+We present a quantum algorithm based on the QFT that solves the discrete logarithm problem in polynomial time. The algorithm follows these steps:
+
+\subsection{State Preparation}
+Initialize two quantum registers in the state:
+
+\begin{equation}
+    \ket{\psi_0} = \frac{1}{\sqrt{p}} \sum_{x=0}^{p-1} \ket{x}\ket{0}
+\end{equation}
+
+\subsection{Function Evaluation}
+Apply the modular exponentiation function:
+
+\begin{equation}
+    \ket{\psi_1} = \frac{1}{\sqrt{p}} \sum_{x=0}^{p-1} \ket{x}\ket{g^x \bmod p}
+\end{equation}
+
+\subsection{Quantum Fourier Transform}
+Apply the QFT to the first register:
+
+\begin{equation}
+    QFT: \ket{x} \rightarrow \frac{1}{\sqrt{p}} \sum_{y=0}^{p-1} e^{2\pi ixy/p}\ket{y}
+\end{equation}
+
+The resulting state becomes:
+
+\begin{equation}
+    \ket{\psi_2} = \frac{1}{p} \sum_{x=0}^{p-1} \sum_{y=0}^{p-1} e^{2\pi ixy/p}\ket{y}\ket{g^x \bmod p}
+\end{equation}
+
+\subsection{Measurement}
+Measure both registers. The period finding aspect of the QFT allows us to extract the discrete logarithm with high probability.
+
+\section{Complexity Analysis}
+The quantum algorithm achieves polynomial time complexity through:
+\begin{enumerate}
+    \item State preparation: $O(\log p)$ qubits and operations
+    \item Modular exponentiation: $O(\log^3 p)$ operations
+    \item QFT implementation: $O(\log^2 p)$ operations
+\end{enumerate}
+
+The total complexity is $O(\log^3 p)$, which is exponentially faster than the best classical algorithms.
+
+\section{Conclusion}
+The quantum solution to the discrete logarithm problem demonstrates the potential vulnerability of classical cryptographic systems to quantum attacks. This has significant implications for the security of Diffie-Hellman and similar protocols in a post-quantum world, necessitating the development of quantum-resistant alternatives.
+
+\end{document}
